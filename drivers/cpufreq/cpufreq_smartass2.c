@@ -52,11 +52,11 @@ static unsigned int awake_ideal_freq;
  * that practically when sleep_ideal_freq==0 the awake_ideal_freq is used
  * also when suspended).
  */
-#define DEFAULT_SLEEP_IDEAL_FREQ 245000
+#define DEFAULT_SLEEP_IDEAL_FREQ 245760
 static unsigned int sleep_ideal_freq;
 
 /*
- * Freqeuncy delta when ramping up above the ideal freqeuncy.
+ * Frequency delta when ramping up above the ideal freqeuncy.
  * Zero disables and causes to always jump straight to max frequency.
  * When below the ideal freqeuncy we always ramp up to the ideal freq.
  */
@@ -64,7 +64,7 @@ static unsigned int sleep_ideal_freq;
 static unsigned int ramp_up_step;
 
 /*
- * Freqeuncy delta when ramping down below the ideal freqeuncy.
+ * Frequency delta when ramping down below the ideal freqeuncy.
  * Zero disables and will calculate ramp down according to load heuristic.
  * When above the ideal freqeuncy we always ramp down to the ideal freq.
  */

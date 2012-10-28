@@ -151,6 +151,174 @@ static struct platform_device msm_imic_device = {
 	.dev = { .platform_data = &snddev_imic_data },
 };
 
+//MM-SL-AddPathForGCFReceiver-00+{
+static struct adie_codec_action_unit imic_gcf_48KHz_osr256_actions[] =
+	HANDSET_GCF_TX_48000_OSR_256_FFA;
+
+static struct adie_codec_hwsetting_entry imic_gcf_settings[] = {
+	{
+		.freq_plan = 48000,
+		.osr = 256,
+		.actions = imic_gcf_48KHz_osr256_actions,
+		.action_sz = ARRAY_SIZE(imic_gcf_48KHz_osr256_actions),
+	}
+};
+static struct adie_codec_dev_profile imic_gcf_profile = {
+	.path_type = ADIE_CODEC_TX,
+	.settings = imic_gcf_settings,
+	.setting_sz = ARRAY_SIZE(imic_gcf_settings),
+};
+
+static struct snddev_icodec_data snddev_imic_gcf_data = {
+	.capability = (SNDDEV_CAP_TX | SNDDEV_CAP_VOICE),
+	.name = "handset_gcf_tx",
+	.copp_id = 0,
+	.acdb_id = ACDB_ID_HANDSET_MIC,//MM-RC-ADD_PATH_GCF-*03
+	.profile = &imic_gcf_profile,
+	.channel_mode = 1,
+	.pmctl_id = imic_pmctl_id,
+	.pmctl_id_sz = ARRAY_SIZE(imic_pmctl_id),
+	.default_sample_rate = 48000,
+	.pamp_on = NULL,
+	.pamp_off = NULL,
+};
+
+static struct platform_device msm_imic_gcf_device = {
+	.name = "snddev_icodec",
+	.id = 32,
+	.dev = { .platform_data = &snddev_imic_gcf_data },
+};
+
+
+static struct adie_codec_action_unit iearpiece_gcf_48KHz_osr256_actions[] =
+	HANDSET_GCF_RX_48000_OSR_256_FFA;
+
+static struct adie_codec_hwsetting_entry iearpiece_gcf_settings[] = {
+	{
+		.freq_plan = 48000,
+		.osr = 256,
+		.actions = iearpiece_gcf_48KHz_osr256_actions,
+		.action_sz = ARRAY_SIZE(iearpiece_gcf_48KHz_osr256_actions),
+	}
+};
+
+static struct adie_codec_dev_profile iearpiece_gcf_profile = {
+	.path_type = ADIE_CODEC_RX,
+	.settings = iearpiece_gcf_settings,
+	.setting_sz = ARRAY_SIZE(iearpiece_gcf_settings),
+};
+
+static struct snddev_icodec_data snddev_iearpiece_gcf_data = {
+	.capability = (SNDDEV_CAP_RX | SNDDEV_CAP_VOICE),
+	.name = "handset_gcf_rx",
+	.copp_id = 0,
+	.acdb_id = ACDB_ID_HANDSET_SPKR,//MM-RC-ADD_PATH_GCF-*03
+	.profile = &iearpiece_gcf_profile,
+	.channel_mode = 1,
+	.pmctl_id = NULL,
+	.pmctl_id_sz = 0,
+	.default_sample_rate = 48000,
+	.pamp_on = NULL,
+	.pamp_off = NULL,
+	.max_voice_rx_vol[VOC_NB_INDEX] = -600,
+	.min_voice_rx_vol[VOC_NB_INDEX] = -2100,   
+	.max_voice_rx_vol[VOC_WB_INDEX] = -600,      
+	.min_voice_rx_vol[VOC_WB_INDEX] = -2100,   
+};
+
+static struct platform_device msm_iearpiece_gcf_device = {
+	.name = "snddev_icodec",
+	.id = 33,
+	.dev = { .platform_data = &snddev_iearpiece_gcf_data },
+};
+//MM-SL-AddPathForGCFReceiver-00+}
+
+//SW5-MM-DL-AddAudioPathForVoip-00+{
+//VOIP Handset Rx
+static struct adie_codec_action_unit iearpiece_voip_48KHz_osr256_actions[] =
+	HANDSET_RX_48000_OSR_256_VOIP;
+
+static struct adie_codec_hwsetting_entry iearpiece_voip_settings[] = {
+	{
+		.freq_plan = 48000,
+		.osr = 256,
+		.actions = iearpiece_voip_48KHz_osr256_actions,
+		.action_sz = ARRAY_SIZE(iearpiece_voip_48KHz_osr256_actions),
+	}
+};
+
+static struct adie_codec_dev_profile iearpiece_voip_profile = {
+	.path_type = ADIE_CODEC_RX,
+	.settings = iearpiece_voip_settings,
+	.setting_sz = ARRAY_SIZE(iearpiece_voip_settings),
+};
+
+static struct snddev_icodec_data snddev_iearpiece_voip_data = {
+	.capability = (SNDDEV_CAP_RX | SNDDEV_CAP_VOICE),
+	.name = "voip_handset_rx",
+	.copp_id = 0,
+	.acdb_id = ACDB_ID_HANDSET_SPKR,
+	.profile = &iearpiece_voip_profile,
+	.channel_mode = 1,
+	.pmctl_id = NULL,
+	.pmctl_id_sz = 0,
+	.default_sample_rate = 48000,
+	.pamp_on = NULL,
+	.pamp_off = NULL,
+	.max_voice_rx_vol[VOC_NB_INDEX] = -600,
+	.min_voice_rx_vol[VOC_NB_INDEX] = -2100,
+	.max_voice_rx_vol[VOC_WB_INDEX] = -600,
+	.min_voice_rx_vol[VOC_WB_INDEX] = -2100,
+};
+
+static struct platform_device msm_iearpiece_voip_device = {
+	.name = "snddev_icodec",
+	.id = 29,
+	.dev = { .platform_data = &snddev_iearpiece_voip_data },
+};
+
+//VOIP Speaker Tx
+static struct adie_codec_action_unit ispeaker_tx_48KHz_osr256_voip_actions[] =
+	SPEAKER_TX_48000_OSR_256_VOIP;
+
+static struct adie_codec_hwsetting_entry ispeaker_tx_voip_settings[] = {
+	{
+		.freq_plan = 48000,
+		.osr = 256,
+		.actions = ispeaker_tx_48KHz_osr256_voip_actions,
+		.action_sz = ARRAY_SIZE(ispeaker_tx_48KHz_osr256_voip_actions),
+	}
+};
+
+static struct adie_codec_dev_profile ispeaker_tx_voip_profile = {
+	.path_type = ADIE_CODEC_TX,
+	.settings = ispeaker_tx_voip_settings,
+	.setting_sz = ARRAY_SIZE(ispeaker_tx_voip_settings),
+};
+
+static enum hsed_controller ispk_voip_pmctl_id[] = {PM_HSED_CONTROLLER_0};
+
+static struct snddev_icodec_data snddev_ispeaker_tx_voip_data = {
+	.capability = (SNDDEV_CAP_TX | SNDDEV_CAP_VOICE),
+	.name = "voip_speaker_tx",
+	.copp_id = 0,
+	.acdb_id = ACDB_ID_HANDSET_MIC,
+	.profile = &ispeaker_tx_voip_profile,
+	.channel_mode = 1,
+	.pmctl_id = ispk_voip_pmctl_id,
+	.pmctl_id_sz = ARRAY_SIZE(ispk_voip_pmctl_id),
+	.default_sample_rate = 48000,
+	.pamp_on = NULL,
+	.pamp_off = NULL,
+};
+
+static struct platform_device msm_ispeaker_tx_voip_device = {
+	.name = "snddev_icodec",
+	.id = 31,
+	.dev = { .platform_data = &snddev_ispeaker_tx_voip_data },
+};
+//SW5-MM-DL-AddAudioPathForVoip-00+}
+
 static struct adie_codec_action_unit ihs_stereo_rx_48KHz_osr256_actions[] =
 	HEADSET_STEREO_RX_LEGACY_48000_OSR_256;
 
@@ -304,10 +472,10 @@ static struct snddev_icodec_data snddev_ihs_ffa_stereo_rx_data = {
 	.voltage_off = msm_snddev_hsed_voltage_off,
 	//SW2-6-MM-RC-SFX-VOL-TUNING-01*{
 	#ifdef CONFIG_FIH_PROJECT_SF4Y6
-		.max_voice_rx_vol[VOC_NB_INDEX] = -400,     //SW5-MM-DL-AudioTuning-00
-		.min_voice_rx_vol[VOC_NB_INDEX] = -2400,    //SW5-MM-DL-AudioTuning-00
-		.max_voice_rx_vol[VOC_WB_INDEX] = -400,     //SW5-MM-DL-AudioTuning-00
-		.min_voice_rx_vol[VOC_WB_INDEX] = -2400,    //SW5-MM-DL-AudioTuning-00   
+		.max_voice_rx_vol[VOC_NB_INDEX] = -900,     //SW5-MM-DL-AudioTuning-00
+		.min_voice_rx_vol[VOC_NB_INDEX] = -2900,    //SW5-MM-DL-AudioTuning-00
+		.max_voice_rx_vol[VOC_WB_INDEX] = -900,     //SW5-MM-DL-AudioTuning-00
+		.min_voice_rx_vol[VOC_WB_INDEX] = -2900,    //SW5-MM-DL-AudioTuning-00   
 	#elif defined CONFIG_FIH_PROJECT_SF4V5
 		.max_voice_rx_vol[VOC_NB_INDEX] = -900,      
 		.min_voice_rx_vol[VOC_NB_INDEX] = -2900,   
@@ -550,10 +718,10 @@ static struct snddev_icodec_data snddev_ispeaker_rx_data = {
 		.max_voice_rx_vol[VOC_WB_INDEX] = -400,    //MM-RC-SF8audiotuning-01*  
 		.min_voice_rx_vol[VOC_WB_INDEX] = -1900,   //MM-RC-SF8audiotuning-01*
 	#else
-		.max_voice_rx_vol[VOC_NB_INDEX] = 600,      // 900,
-		.min_voice_rx_vol[VOC_NB_INDEX] = -1400,    // -600,
-		.max_voice_rx_vol[VOC_WB_INDEX] = 600,      // 900,
-		.min_voice_rx_vol[VOC_WB_INDEX] = -1400,    // -600,
+		.max_voice_rx_vol[VOC_NB_INDEX] = 0,
+		.min_voice_rx_vol[VOC_NB_INDEX] = -2400,
+		.max_voice_rx_vol[VOC_WB_INDEX] = 0,
+		.min_voice_rx_vol[VOC_WB_INDEX] = -2400,
 	#endif
 	//SW2-6-MM-RC-SFX-VOL-TUNING-01*}
 };
@@ -871,6 +1039,117 @@ static struct platform_device msm_idual_mic_endfire_device = {
 	.dev = { .platform_data = &snddev_idual_mic_endfire_data },
 };
 
+//Div2-SW5-BSP-cts-micamp-00+{
+static struct adie_codec_action_unit cts_idual_mic_endfire_8KHz_osr256_actions[] =
+	CTS_MIC1_LEFT_AUX_IN_RIGHT_8000_OSR_256;
+	
+static struct adie_codec_hwsetting_entry cts_idual_mic_endfire_settings[] = {
+	{
+		.freq_plan = 8000,
+		.osr = 256,
+		.actions = cts_idual_mic_endfire_8KHz_osr256_actions,
+		.action_sz = ARRAY_SIZE(cts_idual_mic_endfire_8KHz_osr256_actions),
+	}, /* 8KHz profile can be used for 16KHz */
+	{
+		.freq_plan = 16000,
+		.osr = 256,
+		.actions = cts_idual_mic_endfire_8KHz_osr256_actions,
+		.action_sz = ARRAY_SIZE(cts_idual_mic_endfire_8KHz_osr256_actions),
+	}, /* 8KHz profile can be used for 48KHz */
+	{
+		.freq_plan = 48000,
+		.osr = 256,
+		.actions = cts_idual_mic_endfire_8KHz_osr256_actions,
+		.action_sz = ARRAY_SIZE(cts_idual_mic_endfire_8KHz_osr256_actions),
+	}
+};
+
+static struct adie_codec_dev_profile cts_idual_mic_endfire_profile = {
+	.path_type = ADIE_CODEC_TX,
+	.settings = cts_idual_mic_endfire_settings,
+	.setting_sz = ARRAY_SIZE(cts_idual_mic_endfire_settings),
+};
+
+static enum hsed_controller cts_idual_mic_endfire_pmctl_id[] = {
+	PM_HSED_CONTROLLER_0
+};
+
+static struct snddev_icodec_data snddev_cts_idual_mic_endfire_data = {
+	.capability = (SNDDEV_CAP_TX | SNDDEV_CAP_VOICE),
+	.name = "handset_cts_dual_mic_endfire_tx",
+	.copp_id = 0,
+	.acdb_id = ACDB_ID_HANDSET_MIC_ENDFIRE,
+	.profile = &cts_idual_mic_endfire_profile,
+	.channel_mode = 2,
+	.default_sample_rate = 48000,
+	.pmctl_id = cts_idual_mic_endfire_pmctl_id,
+	.pmctl_id_sz = ARRAY_SIZE(cts_idual_mic_endfire_pmctl_id),
+	.pamp_on = NULL,
+	.pamp_off = NULL,
+};
+
+static struct platform_device msm_cts_idual_mic_endfire_device = {
+	.name = "snddev_icodec",
+	.id = 34,
+	.dev = { .platform_data = &snddev_cts_idual_mic_endfire_data },
+};
+//Div2-SW5-BSP-cts-micamp-00+}
+
+//Div2-SW5-BSP-cta-sidetone-00+{
+static struct adie_codec_action_unit cta_idual_mic_endfire_8KHz_osr256_actions[] =
+	CTA_MIC1_LEFT_AUX_IN_RIGHT_8000_OSR_256;
+	
+static struct adie_codec_hwsetting_entry cta_idual_mic_endfire_settings[] = {
+	{
+		.freq_plan = 8000,
+		.osr = 256,
+		.actions = cta_idual_mic_endfire_8KHz_osr256_actions,
+		.action_sz = ARRAY_SIZE(cta_idual_mic_endfire_8KHz_osr256_actions),
+	}, /* 8KHz profile can be used for 16KHz */
+	{
+		.freq_plan = 16000,
+		.osr = 256,
+		.actions = cta_idual_mic_endfire_8KHz_osr256_actions,
+		.action_sz = ARRAY_SIZE(cta_idual_mic_endfire_8KHz_osr256_actions),
+	}, /* 8KHz profile can be used for 48KHz */
+	{
+		.freq_plan = 48000,
+		.osr = 256,
+		.actions = cta_idual_mic_endfire_8KHz_osr256_actions,
+		.action_sz = ARRAY_SIZE(cta_idual_mic_endfire_8KHz_osr256_actions),
+	}
+};
+
+static struct adie_codec_dev_profile cta_idual_mic_endfire_profile = {
+	.path_type = ADIE_CODEC_TX,
+	.settings = cta_idual_mic_endfire_settings,
+	.setting_sz = ARRAY_SIZE(cta_idual_mic_endfire_settings),
+};
+
+static enum hsed_controller cta_idual_mic_endfire_pmctl_id[] = {
+	PM_HSED_CONTROLLER_0
+};
+
+static struct snddev_icodec_data snddev_cta_idual_mic_endfire_data = {
+	.capability = (SNDDEV_CAP_TX | SNDDEV_CAP_VOICE),
+	.name = "handset_cta_dual_mic_endfire_tx",
+	.copp_id = 0,
+	.acdb_id = ACDB_ID_HANDSET_MIC_ENDFIRE,
+	.profile = &cta_idual_mic_endfire_profile,
+	.channel_mode = 2,
+	.default_sample_rate = 48000,
+	.pmctl_id = cta_idual_mic_endfire_pmctl_id,
+	.pmctl_id_sz = ARRAY_SIZE(cta_idual_mic_endfire_pmctl_id),
+	.pamp_on = NULL,
+	.pamp_off = NULL,
+};
+
+static struct platform_device msm_cta_idual_mic_endfire_device = {
+	.name = "snddev_icodec",
+	.id = 35,
+	.dev = { .platform_data = &snddev_cta_idual_mic_endfire_data },
+};
+//Div2-SW5-BSP-cta-sidetone-00+}
 
 static struct snddev_icodec_data\
 		snddev_idual_mic_endfire_real_stereo_data = {
@@ -1261,10 +1540,10 @@ static struct snddev_icodec_data snddev_iearpiece_ffa_data = {
 	.pamp_off = NULL,
 	//SW2-6-MM-RC-SFX-VOL-TUNING-01*{
 	#ifdef CONFIG_FIH_PROJECT_SF4Y6
-		.max_voice_rx_vol[VOC_NB_INDEX] = -900,      //SW5-MM-DL-AudioTuning-00
-		.min_voice_rx_vol[VOC_NB_INDEX] = -2900,     //SW5-MM-DL-AudioTuning-00
-		.max_voice_rx_vol[VOC_WB_INDEX] = -900,      //SW5-MM-DL-AudioTuning-00
-		.min_voice_rx_vol[VOC_WB_INDEX] = -2900,     //SW5-MM-DL-AudioTuning-00
+		.max_voice_rx_vol[VOC_NB_INDEX] = -600,      //SW5-MM-DL-AudioTuning-00
+		.min_voice_rx_vol[VOC_NB_INDEX] = -2100,     //SW5-MM-DL-AudioTuning-00
+		.max_voice_rx_vol[VOC_WB_INDEX] = -600,      //SW5-MM-DL-AudioTuning-00
+		.min_voice_rx_vol[VOC_WB_INDEX] = -2100,     //SW5-MM-DL-AudioTuning-00
 	#elif defined CONFIG_FIH_PROJECT_SF4V5
 		.max_voice_rx_vol[VOC_NB_INDEX] = -600,      
 		.min_voice_rx_vol[VOC_NB_INDEX] = -2100,   
@@ -1276,10 +1555,10 @@ static struct snddev_icodec_data snddev_iearpiece_ffa_data = {
 		.max_voice_rx_vol[VOC_WB_INDEX] = -600,      //MM-RC-SF8audiotuning-00*
 		.min_voice_rx_vol[VOC_WB_INDEX] = -2100,   //MM-RC-SF8audiotuning-00*
 	#else
-		.max_voice_rx_vol[VOC_NB_INDEX] = 0,
-		.min_voice_rx_vol[VOC_NB_INDEX] = -2400,
-		.max_voice_rx_vol[VOC_WB_INDEX] = 0,
-		.min_voice_rx_vol[VOC_WB_INDEX] = -2400,
+		.max_voice_rx_vol[VOC_NB_INDEX] = 300,
+		.min_voice_rx_vol[VOC_NB_INDEX] = -2700,
+		.max_voice_rx_vol[VOC_WB_INDEX] = 300,
+		.min_voice_rx_vol[VOC_WB_INDEX] = -2700,
 	#endif
 	//SW2-6-MM-RC-SFX-VOL-TUNING-01*}
 };
@@ -1744,6 +2023,12 @@ static struct platform_device *snd_devices_ffa[] __initdata = {
 	&msm_imic2_ffa_device,/* Div1-FW3-BSP-AUDIO */
 	&msm_ispeaker_rx_left_device,/* Div1-FW3-BSP-AUDIO */
 	&msm_ispeaker_rx_right_device,/* Div1-FW3-BSP-AUDIO */
+	&msm_imic_gcf_device, //MM-SL-AddPathForGCFReceiver-00+
+	&msm_iearpiece_gcf_device,//MM-SL-AddPathForGCFReceiver-00+
+	&msm_cts_idual_mic_endfire_device, //Div2-SW5-BSP-cts-micamp-00+
+	&msm_cta_idual_mic_endfire_device, //Div2-SW5-BSP-cta-sidetone-00+
+	&msm_iearpiece_voip_device, //SW5-MM-DL-AddAudioPathForVoip-00+
+	&msm_ispeaker_tx_voip_device, //SW5-MM-DL-AddAudioPathForVoip-00+
 };
 
 static struct platform_device *snd_devices_surf[] __initdata = {

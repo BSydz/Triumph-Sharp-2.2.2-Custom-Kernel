@@ -361,7 +361,7 @@ static int product_id_read(char *page, char **start, off_t off, int count, int *
   return proc_calc_metrics(page, start, off, count, eof, len);	
 }
 #endif
-//SW252-rexer-upld-00+]
+//SW252-rexer-upld-01*]
 //SW252-rexer-dual_SD-00+[
 extern int dual_sd;
 static int dual_sd_read(char *page, char **start, off_t off, int count, int *eof, void *data)

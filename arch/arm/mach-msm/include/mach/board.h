@@ -193,13 +193,12 @@ struct msm_camera_sensor_info {
         int flash_main_waittime;
         int flash_main_starttime;
         int flash_second_waittime;
-        int preflash_light;//Div2-SW6-MM-CL-FB3LED-00+
         //SW5-Multimedia-TH-FlashModeSetting-01+}
         
         //SW5-Multimedia-TH-MT9P111ReAFTest-00+{
         int fast_af_retest_target;
         //SW5-Multimedia-TH-MT9P111ReAFTest-00+}
-        int torch_light;//Div2-SW6-MM-CL-FB3LED-00+
+        
         struct msm_camera_device_platform_data *pdata;
         struct resource *resource;
         uint8_t num_resources;

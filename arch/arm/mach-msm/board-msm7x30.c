@@ -52,7 +52,6 @@
 /* } Div2-SW2-BSP-FBX-LEDS */
 #include <linux/input/cy8c_ts.h>
 #include <linux/msm_adc.h>
-#include <linux/dma-mapping.h>
 
 #include <asm/mach-types.h>
 #include <asm/mach/arch.h>
@@ -161,7 +160,7 @@
 /* FIHTDC, Div2-SW2-BSP SungSCLee, HDMI { */
 #define MSM_FB_SIZE		0xA00000       ///0x500000
 /* } FIHTDC, Div2-SW2-BSP SungSCLee, HDMI */
-#define MSM_GPU_PHYS_SIZE       SZ_2M
+#define MSM_GPU_PHYS_SIZE       SZ_4M
 #define MSM_PMEM_ADSP_SIZE      0x2000000  //SW2-5-CL-Camera-720P-00*
 #define MSM_FLUID_PMEM_ADSP_SIZE	0x2800000
 #define PMEM_KERNEL_EBI1_SIZE   0x600000
@@ -1465,8 +1464,6 @@ static struct msm_camera_sensor_info msm_camera_sensor_mt9p111_data = {
     .flash_main_waittime = 0,
     .flash_main_starttime = 0,
     .flash_second_waittime = 0,
-    .preflash_light = 0x31,//Div2-SW6-MM-CL-FB3LED-00+
-    .torch_light = 0x34,//Div2-SW6-MM-CL-FB3LED-00+
     //SW5-Multimedia-TH-FlashModeSetting-01+}
 
     //SW5-Multimedia-TH-MT9P111ReAFTest-00+{
@@ -1957,11 +1954,6 @@ void camera_sensor_hwpin_init(void)
             msm_camera_sensor_mt9p111_data.flash_main_starttime = 90;
             msm_camera_sensor_mt9p111_data.flash_main_waittime = 700;
         }
-        if(pid ==Product_FB3 )//Div2-SW6-MM-CL-FB3LED-00+
-        {
-            msm_camera_sensor_mt9p111_data.torch_light = 0x3E;//Div2-SW6-MM-CL-FB3LED-01*
-            msm_camera_sensor_mt9p111_data.preflash_light=0x3E;
-        }
     }
 
 #endif
@@ -2424,7 +2416,9 @@ int mi2s_config_data_gpio(u32 direction, u8 sd_line_mask)
 	case DIR_RX:
 		i = 0;
 		while (sd_line_mask && (rc == 0)) {
+			
 			if (sd_line_mask & 0x1) {
+				
 				rc = msm_gpios_request_enable(
 					mi2s_rx_data_lines_gpios + i , 1);
 				if (rc) {
@@ -3477,6 +3471,7 @@ static char *usb_functions_c000[] = {
 // Removed modem composition as c001 is used for UMS/ADB
 //C001
 static char *usb_functions_c001[] = {
+    "modem",
     "adb",
     "usb_mass_storage",
 };
